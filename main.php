@@ -3,8 +3,9 @@
 require_once 'autoload.php';
 
 use Bruna\Classes\Cpf;
+use Bruna\Classes\ErroAoInserirUsuarioException;
 use Bruna\Classes\Usuario;
-use Bruna\Classes\UsuarioRepository;
+use Bruna\Classes\RepositorioDoUsuario;
 
 function main(): void {
     echo '~~~~~~~~~~~~~~ Bem vindo(a) a NOX ~~~~~~~~~~~~~' . PHP_EOL;
@@ -15,27 +16,27 @@ function main(): void {
 
 function menu(): void
 {
-    $option = null;
+    $opcao = null;
 
-    while($option != 6 || $option == null) {
+    while($opcao != 6 || $opcao == null) {
 
         echo 'Selecione uma das opções abaixo:' . PHP_EOL;
         echo "1 - Adicionar\n2 - Exibir\n3 - Listar\n4 - Alterar\n5 - Remover\n6 - Sair"  . PHP_EOL;
 
-        $validOptions = ['1', '2', '3', '4', '5', '6'];
-        $option = readline();
+        $opcoesValidas = ['1', '2', '3', '4', '5', '6'];
+        $opcao = readline();
 
-        if ($option == '1') {
-            add();
-        } elseif ($option == '2') {
-            show();
-        } elseif ($option == '3') {
-            lista();
-        } elseif ($option == '4') {
-            update();
-        } elseif ($option == '5') {
-            remove();
-        } elseif ($option == '6') {
+        if ($opcao == '1') {
+            adicionar();
+        } elseif ($opcao == '2') {
+            mostrar();
+        } elseif ($opcao == '3') {
+            listar();
+        } elseif ($opcao == '4') {
+            atualizar();
+        } elseif ($opcao == '5') {
+            remover();
+        } elseif ($opcao == '6') {
             exit();
         } else {
             echo 'opção inválida' . PHP_EOL;
@@ -45,10 +46,12 @@ function menu(): void
 
 
 
-function add(): void
+function adicionar(): void
 {
-    echo 'Adicionar nome a lista' . PHP_EOL;
+    echo 'Adicionar nome a listar' . PHP_EOL;
     echo "~~~~~~~~~~~~~~~~~~~~~~\n" . PHP_EOL;
+    
+    $repositorioUsuario = new RepositorioDoUsuario();
 
     $cpf = null;
     $isValidCpf = false;
@@ -63,35 +66,43 @@ function add(): void
             $isValidCpf = false;
         }
     }
-    echo "ai papai" . PHP_EOL;
-    die;
 
-    while (true) {
-        $askName = readline('Informe o nome do usuário: ');
-        $usuario = new Usuario($askName, $cpf);
+    $nomeValido = false;
 
-        if($usuario == true){
-            die;
-        }
+    while ($nomeValido == false) {
+        $nomeUsuario = readline('Informe o nome do usuário: ');
+        $nomeValido = true;
+        if (strlen($nomeUsuario) == 0) {
+            echo 'Nome inválido' . PHP_EOL;
+            $nomeValido = false;
+        } 
     }
+
+    try {
+        $repositorioUsuario->store($nomeUsuario, (string) $cpf);
+        echo "usuário $nomeUsuario inserido com sucesso!" . PHP_EOL;
+    } catch (ErroAoInserirUsuarioException $exception) {
+        echo $exception->getMessage();
+    }
+
 }
 
-function show(): void
+function mostrar(): void
 {
 
 }
 
-function lista(): void
+function listar(): void
 {
 
 }
 
-function update(): void
+function atualizar(): void
 {
 
 }
 
-function remove(): void
+function remover(): void
 {
 
 }

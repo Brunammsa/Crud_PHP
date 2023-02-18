@@ -2,7 +2,7 @@
 
 namespace Bruna\Classes;
 
-class UsuarioRepository
+class RepositorioDoUsuario
 {
     private int $id;
     
@@ -20,9 +20,8 @@ class UsuarioRepository
      * a função store recebe nome e cpf e retorna true se for 
      * inserido usuário ou false se não
      */
-    public function store(string $name, string $cpf): bool
+    public function store(string $name, string $cpf): void
     {
-        
     }
 
     public function show(int $id): ?Usuario

@@ -7,10 +7,11 @@ use LengthException;
 class Usuario
 {
 
+
     public function __construct(
         protected readonly string $name,
-        private Cpf $cpf,
-        public readonly int $id
+        public readonly int $id,
+        private Cpf $cpf
     )
     {
         $this->validaNome($name);
