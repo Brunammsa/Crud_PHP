@@ -3,8 +3,8 @@
 require_once 'autoload.php';
 
 use Bruna\Classes\Cpf;
+use Bruna\Classes\Id;
 use Bruna\Classes\ErroAoInserirUsuarioException;
-use Bruna\Classes\Usuario;
 use Bruna\Classes\RepositorioDoUsuario;
 
 function main(): void {
@@ -79,7 +79,7 @@ function adicionar(): void
     }
 
     try {
-        $repositorioUsuario->store($nomeUsuario, (string) $cpf);
+        $repositorioUsuario->armazena($nomeUsuario, (string) $cpf);
         echo "usuário $nomeUsuario inserido com sucesso!" . PHP_EOL;
     } catch (ErroAoInserirUsuarioException $exception) {
         echo $exception->getMessage();

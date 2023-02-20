@@ -4,24 +4,49 @@ namespace Bruna\Classes;
 
 class RepositorioDoUsuario
 {
-    private int $id;
     
     public function __construct()
     {
         $this->initializeFile();
     }
 
+/**
+ * inicializando arquivos id e lista de usuários com numeração de ids 0 e cabeçalho
+ */
     private function initializeFile(): void
     {
+        $arquivoUsuarios = fopen('listaUsuarios.csv', 'w');
+        fwrite($arquivoUsuarios, "ID, NOME, CPF\n");
+        
+        $arquivoId = fopen('ultimoId.txt', 'w');
+        fwrite($arquivoId, 0);
 
+        fclose($arquivoId);
+        fclose($arquivoUsuarios);
     }
 
     /**
-     * a função store recebe nome e cpf e retorna true se for 
-     * inserido usuário ou false se não
+     * a função store recebe nome e cpf para serem inseridos no csv arquivoUsuarios
+     * atualiza a quantidade de usuários no arquivoId
      */
-    public function store(string $name, string $cpf): void
+    public function armazena(string $nome, string $cpf): void
     {
+        $arquivoUsuarios = 'listaUsuarios.csv';
+
+        $arquivoUsuarios = fopen($arquivoUsuarios, 'a+');
+
+        $escrevendoUsuario = new Usuario($nome, $cpf);
+
+        fwrite($arquivoUsuarios, $escrevendoUsuario);
+
+
+
+
+
+        
+
+
+
     }
 
     public function show(int $id): ?Usuario
