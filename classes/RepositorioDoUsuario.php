@@ -15,37 +15,38 @@ class RepositorioDoUsuario
  */
     private function initializeFile(): void
     {
-        $arquivoUsuarios = fopen('listaUsuarios.csv', 'w');
-        fwrite($arquivoUsuarios, "ID, NOME, CPF\n");
-        
-        $arquivoId = fopen('ultimoId.txt', 'w');
-        fwrite($arquivoId, 0);
+        if(!file_exists('listaUsuarios.csv')) {
+            $arquivoUsuarios = fopen('listaUsuarios.csv', 'w');
+            $cabecalho = ['ID', 'NOME', 'CPF'];
 
-        fclose($arquivoId);
-        fclose($arquivoUsuarios);
+            fputcsv($arquivoUsuarios, $cabecalho);
+            fclose($arquivoUsuarios);
+        }
+
+        if(!file_exists('ultimoId.txt')) {
+            $arquivoUltimoId = fopen('ultimoId.txt', 'w');
+            fwrite($arquivoUltimoId, 1);
+            fclose($arquivoUltimoId);
+        }
     }
 
     /**
-     * a função store recebe nome e cpf para serem inseridos no csv arquivoUsuarios
+     * a função armazena recebe nome e cpf para serem inseridos no csv arquivoUsuarios
      * atualiza a quantidade de usuários no arquivoId
      */
     public function armazena(string $nome, string $cpf): void
     {
-        $arquivoUsuarios = 'listaUsuarios.csv';
-
-        $arquivoUsuarios = fopen($arquivoUsuarios, 'a+');
-
+        $arquivoUsuarios = fopen('listaUsuarios.csv', 'a');
         $escrevendoUsuario = new Usuario($nome, $cpf);
 
-        fwrite($arquivoUsuarios, $escrevendoUsuario);
+        fputcsv($arquivoUsuarios, (array)$escrevendoUsuario);
+        fclose($arquivoUsuarios);
 
+        $arquivoUltimoId = fopen('ultimoId.txt', 'w');
+        $ultimoId = new Id();
 
-
-
-
-        
-
-
+        fwrite($arquivoUltimoId, $ultimoId->numeroId);
+        fclose($arquivoUltimoId);
 
     }
 

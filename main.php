@@ -6,6 +6,7 @@ use Bruna\Classes\Cpf;
 use Bruna\Classes\Id;
 use Bruna\Classes\ErroAoInserirUsuarioException;
 use Bruna\Classes\RepositorioDoUsuario;
+use Bruna\Classes\Usuario;
 
 function main(): void {
     echo '~~~~~~~~~~~~~~ Bem vindo(a) a NOX ~~~~~~~~~~~~~' . PHP_EOL;
@@ -57,10 +58,10 @@ function adicionar(): void
     $isValidCpf = false;
 
     while($isValidCpf == false) {
-        $askCpf = readline('Informe o CPF do usuário: ');
+        $cpfUsuario = readline('Informe o CPF do usuário: ');
         $isValidCpf = true;
         try{
-            $cpf = new Cpf($askCpf);
+            $cpf = new Cpf($cpfUsuario);
         } catch (InvalidArgumentException $exception){
             echo $exception->getMessage();
             $isValidCpf = false;
@@ -72,15 +73,17 @@ function adicionar(): void
     while ($nomeValido == false) {
         $nomeUsuario = readline('Informe o nome do usuário: ');
         $nomeValido = true;
-        if (strlen($nomeUsuario) == 0) {
-            echo 'Nome inválido' . PHP_EOL;
+        try{
+            $nome = new Usuario($nomeUsuario, $cpfUsuario);
+        } catch (LengthException $exception) {
+            echo $exception->getMessage();
             $nomeValido = false;
-        } 
+        }
     }
 
     try {
         $repositorioUsuario->armazena($nomeUsuario, (string) $cpf);
-        echo "usuário $nomeUsuario inserido com sucesso!" . PHP_EOL;
+        echo "usuário $nomeUsuario inserido com sucesso!\n" . PHP_EOL;
     } catch (ErroAoInserirUsuarioException $exception) {
         echo $exception->getMessage();
     }

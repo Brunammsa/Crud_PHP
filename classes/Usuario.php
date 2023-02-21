@@ -44,8 +44,8 @@ class Usuario
 
     final protected function validaNome(string $name): void
     {
-        if(strlen($name) < 3) {
-            throw new LengthException('Nome inválido, necessário nome com mais de 3 caractéres' . PHP_EOL);
+        if(strlen($name) <= 0) {
+            throw new LengthException('Nome inválido' . PHP_EOL);
         }
     }
 
