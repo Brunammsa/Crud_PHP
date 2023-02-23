@@ -49,7 +49,7 @@ function menu(): void
 
 function adicionar(): void
 {
-    echo 'Adicionar nome a listar' . PHP_EOL;
+    echo 'Adicionando usuario a listar' . PHP_EOL;
     echo "~~~~~~~~~~~~~~~~~~~~~~\n" . PHP_EOL;
     
     $repositorioUsuario = new RepositorioDoUsuario();

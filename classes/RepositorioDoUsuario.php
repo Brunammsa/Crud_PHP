@@ -25,7 +25,7 @@ class RepositorioDoUsuario
 
         if(!file_exists('ultimoId.txt')) {
             $arquivoUltimoId = fopen('ultimoId.txt', 'w');
-            fwrite($arquivoUltimoId, 1);
+            fwrite($arquivoUltimoId, 0);
             fclose($arquivoUltimoId);
         }
     }
@@ -36,18 +36,22 @@ class RepositorioDoUsuario
      */
     public function armazena(string $nome, string $cpf): void
     {
-        $arquivoUsuarios = fopen('listaUsuarios.csv', 'a');
+        $arquivoUsuariosAtt = fopen('listaUsuarios.csv', 'a');
         $escrevendoUsuario = new Usuario($nome, $cpf);
 
-        fputcsv($arquivoUsuarios, (array)$escrevendoUsuario);
-        fclose($arquivoUsuarios);
+        fputcsv($arquivoUsuariosAtt, (array)$escrevendoUsuario);
+        fclose($arquivoUsuariosAtt);
 
+        $linhasUsuarios = file('listaUsuarios.csv');
+
+        foreach ($linhasUsuarios as $linha) {
+            $elementoId = str_getcsv($linha);
+        }
+        
         $arquivoUltimoId = fopen('ultimoId.txt', 'w');
-        $ultimoId = new Id();
+        fwrite($arquivoUltimoId, $elementoId[0]);
 
-        fwrite($arquivoUltimoId, $ultimoId->numeroId);
         fclose($arquivoUltimoId);
-
     }
 
     public function show(int $id): ?Usuario
