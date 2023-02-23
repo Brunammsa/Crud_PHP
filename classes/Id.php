@@ -2,6 +2,8 @@
 
 namespace Bruna\Classes;
 
+use InvalidArgumentException;
+
 class Id
 {    
     public readonly int $numeroId;
@@ -26,6 +28,7 @@ class Id
             return (int) $numeroId;
         }
     }
+
     public function __toString(): string
     {
         return (string) $this->numeroId;

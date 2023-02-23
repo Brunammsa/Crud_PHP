@@ -3,6 +3,7 @@
 require_once 'autoload.php';
 
 use Bruna\Classes\Cpf;
+use Bruna\Classes\ErroAoEncontrarIdException;
 use Bruna\Classes\Id;
 use Bruna\Classes\ErroAoInserirUsuarioException;
 use Bruna\Classes\RepositorioDoUsuario;
@@ -54,7 +55,6 @@ function adicionar(): void
     
     $repositorioUsuario = new RepositorioDoUsuario();
 
-    $cpf = null;
     $isValidCpf = false;
 
     while($isValidCpf == false) {
@@ -67,7 +67,7 @@ function adicionar(): void
             $isValidCpf = false;
         }
     }
-
+    
     $nomeValido = false;
 
     while ($nomeValido == false) {
@@ -92,6 +92,23 @@ function adicionar(): void
 
 function mostrar(): void
 {
+    echo 'Encontrando usuario an listar' . PHP_EOL;
+    echo "~~~~~~~~~~~~~~~~~~~~~~\n" . PHP_EOL;
+
+    $repositorioUsuario = new RepositorioDoUsuario();
+
+    $idUsuario = (int)readline('Qual o ID do usuário que deseja encontrar? ');
+
+    while(!is_numeric($idUsuario)) {
+        if (is_numeric($idUsuario)) {
+            try {
+                $repositorioUsuario->mostraId((int)$idUsuario);
+            } catch (ErroAoEncontrarIdException $exception) {
+                echo $exception->getMessage();
+            }
+        }
+    } $idUsuario = (int)readline('ID inválido, tente novamente: ');
+
 
 }
 

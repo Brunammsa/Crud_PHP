@@ -54,9 +54,21 @@ class RepositorioDoUsuario
         fclose($arquivoUltimoId);
     }
 
-    public function show(int $id): ?Usuario
+    /**
+     * percorrer o arquivo de usuários até encontrar a pessoa com o mesmo ID recebido
+     */
+    public function mostraId(int $id): Usuario
     {
-        
+        $linhasUsuarios = file('listaUsuarios.csv');
+
+        foreach ($linhasUsuarios as $linha) {
+            $elementoId = str_getcsv($linha);
+
+            if ($elementoId[0] == $id) {
+                $usuario = new Usuario($elementoId[1], $elementoId[2]);
+                return $linha;
+            }
+        }
 
     }
 
