@@ -27,15 +27,15 @@ function menu(): void
         $opcao = readline();
 
         if ($opcao == '1') {
-            adicionar();
+            adicionaUsuario();
         } elseif ($opcao == '2') {
-            mostrar();
+            buscaUsuario();
         } elseif ($opcao == '3') {
-            listar();
+            listarUsuarios();
         } elseif ($opcao == '4') {
-            atualizar();
+            atualizaUsuario();
         } elseif ($opcao == '5') {
-            remover();
+            removeUsuario();
         } elseif ($opcao == '6') {
             exit();
         } else {
@@ -45,7 +45,7 @@ function menu(): void
 }
 
 
-function adicionar(): void
+function adicionaUsuario(): void
 {
     echo 'Adicionando usuario a listar' . PHP_EOL;
     echo "~~~~~~~~~~~~~~~~~~~~~~\n" . PHP_EOL;
@@ -86,7 +86,7 @@ function adicionar(): void
 
 }
 
-function mostrar(): void
+function buscaUsuario(): void
 {
     echo 'Encontrando usuario na listar' . PHP_EOL;
     echo "~~~~~~~~~~~~~~~~~~~~~~\n" . PHP_EOL;
@@ -108,22 +108,23 @@ function mostrar(): void
             }
         } else {
             echo 'ID inválido, tente novamente' . PHP_EOL;
+            $isValidId = false;
         }
     } 
 
 }
 
-function listar(): void
+function listarUsuarios(): void
 {
 
 }
 
-function atualizar(): void
+function atualizaUsuario(): void
 {
 
 }
 
-function remover(): void
+function removeUsuario(): void
 {
 
 }

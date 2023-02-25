@@ -63,7 +63,9 @@ class RepositorioDoUsuario
             if ($elementoId[0] == $id) {
                 return Usuario::usuarioFormatado($elementoId[0], $elementoId[1], $elementoId[2]);
             }
-        } return null;
+        } 
+        throw new ErroAoEncontrarIdException();
+        return null;
     }
 
     /**

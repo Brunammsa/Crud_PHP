@@ -6,9 +6,9 @@ use DomainException;
 
 class ErroAoEncontrarIdException extends DomainException
 {
-    public function __construct($id)
+    public function __construct()
     {
-        $mensagem = "O id $id não existe" . PHP_EOL;
+        $mensagem = "Este ID não existe" . PHP_EOL;
         parent::__construct($mensagem);
     }
 
