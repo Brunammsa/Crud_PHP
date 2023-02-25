@@ -4,7 +4,6 @@ require_once 'autoload.php';
 
 use Bruna\Classes\Cpf;
 use Bruna\Classes\ErroAoEncontrarIdException;
-use Bruna\Classes\Id;
 use Bruna\Classes\ErroAoInserirUsuarioException;
 use Bruna\Classes\RepositorioDoUsuario;
 use Bruna\Classes\Usuario;
@@ -25,7 +24,6 @@ function menu(): void
         echo 'Selecione uma das opções abaixo:' . PHP_EOL;
         echo "1 - Adicionar\n2 - Exibir\n3 - Listar\n4 - Alterar\n5 - Remover\n6 - Sair"  . PHP_EOL;
 
-        $opcoesValidas = ['1', '2', '3', '4', '5', '6'];
         $opcao = readline();
 
         if ($opcao == '1') {
@@ -47,14 +45,12 @@ function menu(): void
 }
 
 
-
 function adicionar(): void
 {
     echo 'Adicionando usuario a listar' . PHP_EOL;
     echo "~~~~~~~~~~~~~~~~~~~~~~\n" . PHP_EOL;
     
     $repositorioUsuario = new RepositorioDoUsuario();
-
     $isValidCpf = false;
 
     while($isValidCpf == false) {
@@ -74,7 +70,7 @@ function adicionar(): void
         $nomeUsuario = readline('Informe o nome do usuário: ');
         $nomeValido = true;
         try{
-            $nome = new Usuario($nomeUsuario, $cpfUsuario);
+            Usuario::validaNome($nomeUsuario);
         } catch (LengthException $exception) {
             echo $exception->getMessage();
             $nomeValido = false;
@@ -92,22 +88,28 @@ function adicionar(): void
 
 function mostrar(): void
 {
-    echo 'Encontrando usuario an listar' . PHP_EOL;
+    echo 'Encontrando usuario na listar' . PHP_EOL;
     echo "~~~~~~~~~~~~~~~~~~~~~~\n" . PHP_EOL;
 
     $repositorioUsuario = new RepositorioDoUsuario();
 
-    $idUsuario = (int)readline('Qual o ID do usuário que deseja encontrar? ');
+    $isValidId = false;
 
-    while(!is_numeric($idUsuario)) {
+    while($isValidId == false || $isValidId == null) {
+        $idUsuario = readline('Qual o ID do usuário que deseja encontrar? ');
+        $isValidId = true;
         if (is_numeric($idUsuario)) {
             try {
                 $repositorioUsuario->mostraId((int)$idUsuario);
             } catch (ErroAoEncontrarIdException $exception) {
                 echo $exception->getMessage();
+                $isValidId = false;
             }
         }
-    } $idUsuario = (int)readline('ID inválido, tente novamente: ');
+        echo 'ID inválido, tente novamente' . PHP_EOL;
+        $isValidId = false;
+    } 
+
 
 
 }

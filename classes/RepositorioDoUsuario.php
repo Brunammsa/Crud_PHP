@@ -25,10 +25,12 @@ class RepositorioDoUsuario
 
         if(!file_exists('ultimoId.txt')) {
             $arquivoUltimoId = fopen('ultimoId.txt', 'w');
+
             fwrite($arquivoUltimoId, 0);
             fclose($arquivoUltimoId);
         }
     }
+
 
     /**
      * a função armazena recebe nome e cpf para serem inseridos no csv arquivoUsuarios
@@ -42,14 +44,8 @@ class RepositorioDoUsuario
         fputcsv($arquivoUsuariosAtt, (array)$escrevendoUsuario);
         fclose($arquivoUsuariosAtt);
 
-        $linhasUsuarios = file('listaUsuarios.csv');
-
-        foreach ($linhasUsuarios as $linha) {
-            $elementoId = str_getcsv($linha);
-        }
-        
         $arquivoUltimoId = fopen('ultimoId.txt', 'w');
-        fwrite($arquivoUltimoId, $elementoId[0]);
+        fwrite($arquivoUltimoId, $escrevendoUsuario->id);
 
         fclose($arquivoUltimoId);
     }
@@ -57,19 +53,18 @@ class RepositorioDoUsuario
     /**
      * percorrer o arquivo de usuários até encontrar a pessoa com o mesmo ID recebido
      */
-    public function mostraId(int $id): Usuario
+    public function mostraId(int $id): string
     {
-        $linhasUsuarios = file('listaUsuarios.csv');
+        $linhasUsuarios = fopen('listaUsuarios.csv', 'r');
+
 
         foreach ($linhasUsuarios as $linha) {
             $elementoId = str_getcsv($linha);
 
             if ($elementoId[0] == $id) {
-                $usuario = new Usuario($elementoId[1], $elementoId[2]);
-                return $linha;
+                return Usuario::usuarioFormatado($elementoId[0], $elementoId[1], $elementoId[2]);
             }
         }
-
     }
 
     /**

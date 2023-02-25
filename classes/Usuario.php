@@ -42,7 +42,7 @@ class Usuario
         return $this->cpf->numero;
     }
 
-    final protected function validaNome(string $name): void
+    static public function validaNome(string $name): void
     {
         if(strlen($name) <= 0) {
             throw new LengthException('Nome inválido' . PHP_EOL);
@@ -54,8 +54,13 @@ class Usuario
         return $this->nome;
     }
 
+    static public function usuarioFormatado(int $id, string $nome, string $cpf): string
+    {
+        return "ID: $id, Nome: $nome, CPF: $cpf";
+    }
+
     public function __toString()
     {
-        return "Id: {$this->id}, Nome: {$this->nome}, CPF: {$this->cpf}";
+        return "{$this->id}, {$this->nome}, {$this->cpf}";
     }
 }
