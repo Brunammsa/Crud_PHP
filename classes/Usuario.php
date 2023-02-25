@@ -6,8 +6,8 @@ use LengthException;
 
 class Usuario
 {
-    public readonly Id $id;
-    protected readonly string $nome;
+    public Id $id;
+    protected string $nome;
     private Cpf $cpf;
 
     public function __construct(
@@ -56,7 +56,7 @@ class Usuario
 
     static public function usuarioFormatado(int $id, string $nome, string $cpf): string
     {
-        return "ID: $id, Nome: $nome, CPF: $cpf";
+        return "ID: $id, Nome: $nome, CPF: $cpf\n";
     }
 
     public function __toString()

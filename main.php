@@ -95,22 +95,21 @@ function mostrar(): void
 
     $isValidId = false;
 
-    while($isValidId == false || $isValidId == null) {
+    while($isValidId == false) {
         $idUsuario = readline('Qual o ID do usuário que deseja encontrar? ');
-        $isValidId = true;
         if (is_numeric($idUsuario)) {
             try {
-                $repositorioUsuario->mostraId((int)$idUsuario);
+                $usuarioEncontrado = $repositorioUsuario->mostraId($idUsuario);
+                echo $usuarioEncontrado . PHP_EOL;
+                $isValidId = true;
             } catch (ErroAoEncontrarIdException $exception) {
                 echo $exception->getMessage();
                 $isValidId = false;
             }
+        } else {
+            echo 'ID inválido, tente novamente' . PHP_EOL;
         }
-        echo 'ID inválido, tente novamente' . PHP_EOL;
-        $isValidId = false;
     } 
-
-
 
 }
 

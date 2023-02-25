@@ -5,7 +5,7 @@ use InvalidArgumentException;
 
 final class Cpf
 {
-    public readonly string $numero;
+    public string $numero;
     
     public function __construct(
         string $numero

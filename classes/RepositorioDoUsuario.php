@@ -25,7 +25,7 @@ class RepositorioDoUsuario
 
         if(!file_exists('ultimoId.txt')) {
             $arquivoUltimoId = fopen('ultimoId.txt', 'w');
-
+            
             fwrite($arquivoUltimoId, 0);
             fclose($arquivoUltimoId);
         }
@@ -53,10 +53,9 @@ class RepositorioDoUsuario
     /**
      * percorrer o arquivo de usuários até encontrar a pessoa com o mesmo ID recebido
      */
-    public function mostraId(int $id): string
+    public function mostraId(int $id): ?string
     {
-        $linhasUsuarios = fopen('listaUsuarios.csv', 'r');
-
+        $linhasUsuarios = file('listaUsuarios.csv');
 
         foreach ($linhasUsuarios as $linha) {
             $elementoId = str_getcsv($linha);
@@ -64,7 +63,7 @@ class RepositorioDoUsuario
             if ($elementoId[0] == $id) {
                 return Usuario::usuarioFormatado($elementoId[0], $elementoId[1], $elementoId[2]);
             }
-        }
+        } return null;
     }
 
     /**

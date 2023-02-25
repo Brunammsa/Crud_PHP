@@ -2,11 +2,9 @@
 
 namespace Bruna\Classes;
 
-use InvalidArgumentException;
-
 class Id
 {    
-    public readonly int $numeroId;
+    public int $numeroId;
     static public ?int $ultimoId = null;
     
     public function __construct()
