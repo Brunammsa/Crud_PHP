@@ -63,6 +63,11 @@ class Usuario
         return $this->nome;
     }
 
+    public function usuarioCsv(): string
+    {
+        return "{$this->id},{$this->nome},{$this->cpf}";
+    }
+
  
     public function __toString()
     {

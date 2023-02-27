@@ -54,7 +54,7 @@ function adicionaUsuario(): void
     $isValidCpf = false;
 
     while($isValidCpf == false) {
-        $cpfUsuario = readline('Informe o CPF do usuário: ');
+        $cpfUsuario = readline('Informe o CPF do usuário:(000.000.000-00) ');
         $isValidCpf = true;
         try{
             $cpf = new Cpf($cpfUsuario);
@@ -116,13 +116,74 @@ function buscaUsuario(): void
 
 function listarUsuarios(): void
 {
+    $repositorioUsuario = new RepositorioDoUsuario();
+    $listaUsuarios = $repositorioUsuario->listar();
+
+    foreach ($listaUsuarios as $linha) {
+        $ultimaLinha = $linha;
+        echo "$ultimaLinha" . PHP_EOL;
+    } 
     
 }
 
 function atualizaUsuario(): void
 {
+    $repositorioUsuario = new RepositorioDoUsuario();
+
+    $idValid = false;
+
+    while($idValid == false) {
+        $id = readline("Digite o ID da pessoa que deseja atualizar: ");
+        if (is_numeric($id)) {
+            try {
+                $repositorioUsuario->mostraId($idValid);
+                $idValid = true;
+            } catch (ErroAoEncontrarIdException $exception) {
+                echo $exception->getMessage();
+                $idValid = false;
+            }
+        } else {
+            echo 'ID inválido, tente novamente' . PHP_EOL;
+            $idValid = false;
+        }
+    } 
+
+    $isValidCpf = false;
+
+    while($isValidCpf == false) {
+        $cpfAtualizado = readline("Qual o cpf atualizado?(000.000.000-00) ");
+        $isValidCpf = true;
+        try{
+            $cpf = new Cpf($cpfAtualizado);
+        } catch (InvalidArgumentException $exception){
+            echo $exception->getMessage();
+            $isValidCpf = false;
+        }
+    }
+    
+    $nomeValido = false;
+
+    while ($nomeValido == false) {
+        $nomeAtualizado = readline("Qual o nome atualizado? ");
+        $nomeValido = true;
+        try{
+            Usuario::validaNome($nomeAtualizado);
+        } catch (LengthException $exception) {
+            echo $exception->getMessage();
+            $nomeValido = false;
+        }
+    }
+
+    $usuario = new Usuario($nomeAtualizado, $cpfAtualizado);
+    $usuario->setId($id);
+    $repositorioUsuario->atualizar($usuario);
+
+    if ($repositorioUsuario) {
+        echo 'Usuário atualizado!' . PHP_EOL;
+    }
 
 }
+
 
 function removeUsuario(): void
 {

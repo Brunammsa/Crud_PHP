@@ -73,13 +73,22 @@ class RepositorioDoUsuario
     /**
      * @return array | Usuario[]
      */
-    public function index(): array
+    public function listar(): array
     {
-        
+        $usuarios = file('listaUsuarios.csv');
+        $listaDeUsuarios = [];
+
+        foreach ($usuarios as $linha) {
+            array_push($listaDeUsuarios, $linha);
+        }
+        return $listaDeUsuarios;
     }
 
-    public function update(Usuario $usuario): bool
+    public function atualizar(Usuario $usuario): bool
     {
+        $listaDeUsuarios = file('listaUsuarios.csv');
+        array_splice($listaDeUsuarios, (int)$usuario->id, 1, $usuario->usuarioCsv());
+        return true;
 
     }
 
