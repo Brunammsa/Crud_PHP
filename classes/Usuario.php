@@ -6,6 +6,15 @@ use LengthException;
 
 class Usuario
 {
+    use EntidadeTrait;
+/*
+    usar a trait é o mesmo que importar a função para a classe:
+    
+    public function setId(Id $id): void
+    {
+        $this->id = $id;
+    }
+*/
     public Id $id;
     protected string $nome;
     private Cpf $cpf;
@@ -54,13 +63,9 @@ class Usuario
         return $this->nome;
     }
 
-    static public function usuarioFormatado(int $id, string $nome, string $cpf): string
-    {
-        return "ID: $id, Nome: $nome, CPF: $cpf\n";
-    }
-
+ 
     public function __toString()
     {
-        return "{$this->id}, {$this->nome}, {$this->cpf}";
+        return "ID: {$this->id}, Nome: {$this->nome}, CPF: {$this->cpf}";
     }
 }

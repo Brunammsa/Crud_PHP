@@ -116,7 +116,7 @@ function buscaUsuario(): void
 
 function listarUsuarios(): void
 {
-
+    
 }
 
 function atualizaUsuario(): void

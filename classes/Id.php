@@ -7,8 +7,13 @@ class Id
     public int $numeroId;
     static public ?int $ultimoId = null;
     
-    public function __construct()
+    public function __construct(?int $numero = null)
     {
+        if (!is_null($numero)) {
+            $this->numeroId = $numero;
+            return ;
+        }
+
         if (is_null(self::$ultimoId)) {
             self::$ultimoId = Id::getUltimoIdInserido() + 1;
         } else {

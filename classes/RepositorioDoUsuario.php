@@ -53,7 +53,7 @@ class RepositorioDoUsuario
     /**
      * percorrer o arquivo de usuários até encontrar a pessoa com o mesmo ID recebido
      */
-    public function mostraId(int $id): ?string
+    public function mostraId(int $id): ?Usuario
     {
         $linhasUsuarios = file('listaUsuarios.csv');
 
@@ -61,7 +61,9 @@ class RepositorioDoUsuario
             $elementoId = str_getcsv($linha);
 
             if ($elementoId[0] == $id) {
-                return Usuario::usuarioFormatado($elementoId[0], $elementoId[1], $elementoId[2]);
+                $usuario = new Usuario($elementoId[1], $elementoId[2]);
+                $usuario->setId(new Id((int)$elementoId[0]));
+                return $usuario;
             }
         } 
         throw new ErroAoEncontrarIdException();
