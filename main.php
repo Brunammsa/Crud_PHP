@@ -99,7 +99,7 @@ function buscaUsuario(): void
         $idUsuario = readline('Qual o ID do usuário que deseja encontrar? ');
         if (is_numeric($idUsuario)) {
             try {
-                $usuarioEncontrado = $repositorioUsuario->mostraId($idUsuario);
+                $usuarioEncontrado = $repositorioUsuario->buscaPorId($idUsuario);
                 echo $usuarioEncontrado . PHP_EOL;
                 $isValidId = true;
             } catch (ErroAoEncontrarIdException $exception) {
@@ -111,7 +111,6 @@ function buscaUsuario(): void
             $isValidId = false;
         }
     } 
-
 }
 
 function listarUsuarios(): void
@@ -123,7 +122,6 @@ function listarUsuarios(): void
         $ultimaLinha = $linha;
         echo "$ultimaLinha" . PHP_EOL;
     } 
-    
 }
 
 function atualizaUsuario(): void
@@ -131,12 +129,13 @@ function atualizaUsuario(): void
     $repositorioUsuario = new RepositorioDoUsuario();
 
     $idValid = false;
+    $usuario = null;
 
     while($idValid == false) {
         $id = readline("Digite o ID da pessoa que deseja atualizar: ");
         if (is_numeric($id)) {
             try {
-                $repositorioUsuario->mostraId($idValid);
+                $usuario = $repositorioUsuario->buscaPorId($id);
                 $idValid = true;
             } catch (ErroAoEncontrarIdException $exception) {
                 echo $exception->getMessage();
@@ -154,7 +153,8 @@ function atualizaUsuario(): void
         $cpfAtualizado = readline("Qual o cpf atualizado?(000.000.000-00) ");
         $isValidCpf = true;
         try{
-            $cpf = new Cpf($cpfAtualizado);
+            new Cpf($cpfAtualizado);
+            $usuario->setCpf($cpfAtualizado);
         } catch (InvalidArgumentException $exception){
             echo $exception->getMessage();
             $isValidCpf = false;
@@ -168,26 +168,24 @@ function atualizaUsuario(): void
         $nomeValido = true;
         try{
             Usuario::validaNome($nomeAtualizado);
+            $usuario->setNome($nomeAtualizado);
         } catch (LengthException $exception) {
             echo $exception->getMessage();
             $nomeValido = false;
         }
     }
 
-    $usuario = new Usuario($nomeAtualizado, $cpfAtualizado);
-    $usuario->setId($id);
-    $repositorioUsuario->atualizar($usuario);
+    $usuarioAtualizado = $repositorioUsuario->atualizar($usuario);
 
-    if ($repositorioUsuario) {
+    if ($usuarioAtualizado) {
         echo 'Usuário atualizado!' . PHP_EOL;
     }
-
 }
 
 
 function removeUsuario(): void
 {
-
+    throw new DomainException('FALTANDO IMPLEMENTAÇÃO');
 }
 
 main();

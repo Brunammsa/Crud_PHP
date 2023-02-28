@@ -2,15 +2,10 @@
 
 require_once 'autoload.php';
 
+use Bruna\Classes\Id;
+use Bruna\Classes\RepositorioDoUsuario;
 use Bruna\Classes\Usuario;
 
-$id = 2;
-$linhasUsuarios = file('listaUsuarios.csv');
+$repository = new RepositorioDoUsuario();
 
-foreach ($linhasUsuarios as $linha) {
-    $elementoId = str_getcsv($linha);
-
-    if ($elementoId[0] == $id) {
-        echo Usuario::usuarioFormatado($elementoId[0], $elementoId[1], $elementoId[2]);
-    }
-}
+$repository->remove(3);

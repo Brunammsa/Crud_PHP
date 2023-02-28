@@ -53,7 +53,7 @@ class RepositorioDoUsuario
     /**
      * percorrer o arquivo de usuários até encontrar a pessoa com o mesmo ID recebido
      */
-    public function mostraId(int $id): ?Usuario
+    public function buscaPorId(int $id): ?Usuario
     {
         $linhasUsuarios = file('listaUsuarios.csv');
 
@@ -75,26 +75,62 @@ class RepositorioDoUsuario
      */
     public function listar(): array
     {
-        $usuarios = file('listaUsuarios.csv');
         $listaDeUsuarios = [];
+        $arquivo = file('listaUsuarios.csv');
 
-        foreach ($usuarios as $linha) {
-            array_push($listaDeUsuarios, $linha);
+        foreach ($arquivo as $numeroLinha => $linha) {
+            if ($numeroLinha === 0) {
+                continue;
+            }
+            $linhacsv = str_getcsv($linha);
+            $usuario = new Usuario($linhacsv[1], $linhacsv[2]);
+            $usuario->setId(new Id((int)$linhacsv[0]));
+
+            $listaDeUsuarios[] = $usuario;
         }
         return $listaDeUsuarios;
     }
 
+
     public function atualizar(Usuario $usuario): bool
     {
-        $listaDeUsuarios = file('listaUsuarios.csv');
-        array_splice($listaDeUsuarios, (int)$usuario->id, 1, $usuario->usuarioCsv());
-        return true;
+        $arquivoUsuarios = file('listaUsuarios.csv');
+        $listaDeUsuarios = [];
 
+        foreach ($arquivoUsuarios as $linha) {
+            $linhaComoArray = str_getcsv($linha);
+
+            if ((int)$linhaComoArray[0] === $usuario->getId()) {
+                $linha = $usuario->usuarioCsv();
+            }
+            $listaDeUsuarios[] = $linha;
+        }
+
+        $arquivoUsuariosAtualizados = fopen('listaUsuarios.csv', 'w');
+        foreach ($listaDeUsuarios as $linha) {
+            fwrite($arquivoUsuariosAtualizados ,$linha);
+        }
+        return true;
     }
 
 
     public function remove(int $id): bool
     {
+        $arquivoUsuarios = file('listaUsuarios.csv');
+        $listaDeUsuarios = [];
 
+        foreach ($arquivoUsuarios as $linha) {
+            $linhaComoArray = str_getcsv($linha);
+
+            if ((int)$linhaComoArray[0] !== $id) {
+                $listaDeUsuarios[] = $linha;
+            }
+        }
+
+        $arquivoUsuariosAtualizados = fopen('listaUsuarios.csv', 'w');
+        foreach ($listaDeUsuarios as $linha) {
+            fwrite($arquivoUsuariosAtualizados ,$linha);
+        }
+        return true;
     }
 }

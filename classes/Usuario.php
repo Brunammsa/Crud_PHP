@@ -63,11 +63,25 @@ class Usuario
         return $this->nome;
     }
 
-    public function usuarioCsv(): string
+    public function setNome(string $nome): void
     {
-        return "{$this->id},{$this->nome},{$this->cpf}";
+        $this->nome = $nome;
     }
 
+    public function setCpf(string $cpf): void
+    {
+        $this->cpf = new Cpf($cpf);
+    }
+
+    public function usuarioCsv(): string
+    {
+        return "{$this->id},{$this->nome},{$this->cpf}\n";
+    }
+
+    public function getId(): int
+    {
+        return $this->id->numeroId;
+    }
  
     public function __toString()
     {
