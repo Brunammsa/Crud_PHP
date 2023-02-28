@@ -1,6 +1,10 @@
 <?php
 
-namespace Bruna\Classes;
+namespace Bruna\Classes\Repositorios;
+
+use Bruna\Classes\Entidades\Id;
+use Bruna\Classes\Entidades\Usuario;
+use Bruna\Classes\Excecoes\ErroAoEncontrarIdException;
 
 class RepositorioDoUsuario
 {

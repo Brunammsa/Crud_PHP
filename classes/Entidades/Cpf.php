@@ -1,6 +1,6 @@
 <?php
 
-namespace Bruna\Classes;
+namespace Bruna\Classes\Entidades;
 use InvalidArgumentException;
 
 final class Cpf

@@ -1,6 +1,6 @@
 <?php
 
-namespace Bruna\Classes;
+namespace Bruna\Classes\Excecoes;
 
 use DomainException;
 

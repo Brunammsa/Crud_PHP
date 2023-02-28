@@ -1,12 +1,13 @@
 <?php
 
+use Bruna\Classes\Entidades\Cpf;
+use Bruna\Classes\Entidades\Usuario;
+use Bruna\Classes\Excecoes\ErroAoEncontrarIdException;
+use Bruna\Classes\Excecoes\ErroAoInserirUsuarioException;
+use Bruna\Classes\Repositorios\RepositorioDoUsuario;
+
 require_once 'autoload.php';
 
-use Bruna\Classes\Cpf;
-use Bruna\Classes\ErroAoEncontrarIdException;
-use Bruna\Classes\ErroAoInserirUsuarioException;
-use Bruna\Classes\RepositorioDoUsuario;
-use Bruna\Classes\Usuario;
 
 function main(): void {
     echo '~~~~~~~~~~~~~~ Bem vindo(a) a NOX ~~~~~~~~~~~~~' . PHP_EOL;
@@ -79,7 +80,7 @@ function adicionaUsuario(): void
 
     try {
         $repositorioUsuario->armazena($nomeUsuario, (string) $cpf);
-        echo "usuário $nomeUsuario inserido com sucesso!\n" . PHP_EOL;
+        echo "usuário $nomeUsuario inserido(a) com sucesso!\n" . PHP_EOL;
     } catch (ErroAoInserirUsuarioException $exception) {
         echo $exception->getMessage();
     }

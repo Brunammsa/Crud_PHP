@@ -1,6 +1,8 @@
 <?php
 
-namespace Bruna\Classes;
+namespace Bruna\Classes\Traits;
+
+use Bruna\Classes\Entidades\Id;
 
 trait EntidadeTrait
 {

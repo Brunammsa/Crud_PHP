@@ -1,7 +1,8 @@
 <?php
 
-namespace Bruna\Classes;
+namespace Bruna\Classes\Entidades;
 
+use Bruna\Classes\Traits\EntidadeTrait;
 use LengthException;
 
 class Usuario
