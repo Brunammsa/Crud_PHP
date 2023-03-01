@@ -186,7 +186,31 @@ function atualizaUsuario(): void
 
 function removeUsuario(): void
 {
-    throw new DomainException('FALTANDO IMPLEMENTAÇÃO');
+    $repositorioUsuario = new RepositorioDoUsuario();
+
+    $idValid = false;
+
+    while($idValid == false) {
+        $id = readline("Digite o ID da pessoa que deseja atualizar: ");
+        if (is_numeric($id)) {
+            try {
+                $repositorioUsuario->buscaPorId($id);
+                $idValid = true;
+            } catch (ErroAoEncontrarIdException $exception) {
+                echo $exception->getMessage();
+                $idValid = false;
+            }
+        } else {
+            echo 'ID inválido, tente novamente' . PHP_EOL;
+            $idValid = false;
+        }
+    }
+
+    $usuarioRemovido = $repositorioUsuario->remove($id);
+
+    if ($usuarioRemovido) {
+        echo 'Usuário removido!' . PHP_EOL;
+    }
 }
 
 main();
