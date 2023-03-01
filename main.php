@@ -120,8 +120,7 @@ function listarUsuarios(): void
     $listaUsuarios = $repositorioUsuario->listar();
 
     foreach ($listaUsuarios as $linha) {
-        $ultimaLinha = $linha;
-        echo "$ultimaLinha" . PHP_EOL;
+        echo $linha . PHP_EOL;
     } 
 }
 
