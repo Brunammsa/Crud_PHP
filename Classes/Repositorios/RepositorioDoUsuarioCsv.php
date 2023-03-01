@@ -7,7 +7,7 @@ use Bruna\Classes\Entidades\Usuario;
 use Bruna\Classes\Excecoes\ErroAoEncontrarIdException;
 use Bruna\Classes\Interfaces\IRepositorioDoUsuario;
 
-class RepositorioDoUsuario implements IRepositorioDoUsuario
+class RepositorioDoUsuarioCsv implements IRepositorioDoUsuario
 {
     
     public function __construct()

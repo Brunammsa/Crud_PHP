@@ -4,7 +4,7 @@ use Bruna\Classes\Entidades\Cpf;
 use Bruna\Classes\Entidades\Usuario;
 use Bruna\Classes\Excecoes\ErroAoEncontrarIdException;
 use Bruna\Classes\Excecoes\ErroAoInserirUsuarioException;
-use Bruna\Classes\Repositorios\RepositorioDoUsuario;
+use Bruna\Classes\Repositorios\RepositorioDoUsuarioJson;
 
 require_once 'autoload.php';
 
@@ -51,7 +51,7 @@ function adicionaUsuario(): void
     echo 'Adicionando usuario a listar' . PHP_EOL;
     echo "~~~~~~~~~~~~~~~~~~~~~~\n" . PHP_EOL;
     
-    $repositorioUsuario = new RepositorioDoUsuario();
+    $repositorioUsuario = new RepositorioDoUsuarioJson();
     $isValidCpf = false;
 
     while($isValidCpf == false) {
@@ -92,7 +92,7 @@ function buscaUsuario(): void
     echo 'Encontrando usuario na listar' . PHP_EOL;
     echo "~~~~~~~~~~~~~~~~~~~~~~\n" . PHP_EOL;
 
-    $repositorioUsuario = new RepositorioDoUsuario();
+    $repositorioUsuario = new RepositorioDoUsuarioJson();
 
     $isValidId = false;
 
@@ -116,7 +116,7 @@ function buscaUsuario(): void
 
 function listarUsuarios(): void
 {
-    $repositorioUsuario = new RepositorioDoUsuario();
+    $repositorioUsuario = new RepositorioDoUsuarioJson();
     $listaUsuarios = $repositorioUsuario->listar();
 
     foreach ($listaUsuarios as $linha) {
@@ -127,7 +127,7 @@ function listarUsuarios(): void
 
 function atualizaUsuario(): void
 {
-    $repositorioUsuario = new RepositorioDoUsuario();
+    $repositorioUsuario = new RepositorioDoUsuarioJson();
 
     $idValid = false;
     $usuario = null;
@@ -186,7 +186,7 @@ function atualizaUsuario(): void
 
 function removeUsuario(): void
 {
-    $repositorioUsuario = new RepositorioDoUsuario();
+    $repositorioUsuario = new RepositorioDoUsuarioJson();
 
     $idValid = false;
 
