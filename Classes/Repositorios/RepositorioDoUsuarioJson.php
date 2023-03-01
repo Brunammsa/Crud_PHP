@@ -60,7 +60,20 @@ class RepositorioDoUsuarioJson implements IRepositorioDoUsuario
 
     public function buscaPorId(int $id): ?Usuario
     {
-        return new Usuario('dd', 'ss');
+        $nomeArquivoUsuarios = 'listaUsuarios.json';
+        $conteudoDoArquivo = file_get_contents($nomeArquivoUsuarios);
+        $listaDeUsuariosJson = json_decode($conteudoDoArquivo, true);
+        
+        foreach ($listaDeUsuariosJson as $linha) {
+            if ($linha['id'] == $id) {
+                $usuario = new Usuario($linha['nome'], $linha['cpf']);
+                $usuario->setId(new Id((int)$linha['id']));
+
+                return $usuario;
+            }
+        }
+        throw new ErroAoEncontrarIdException();
+        return null;
     }
 
     public function listar(): array
