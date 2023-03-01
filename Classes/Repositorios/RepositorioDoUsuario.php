@@ -5,8 +5,9 @@ namespace Bruna\Classes\Repositorios;
 use Bruna\Classes\Entidades\Id;
 use Bruna\Classes\Entidades\Usuario;
 use Bruna\Classes\Excecoes\ErroAoEncontrarIdException;
+use Bruna\Classes\Interfaces\IRepositorioDoUsuario;
 
-class RepositorioDoUsuario
+class RepositorioDoUsuario implements IRepositorioDoUsuario
 {
     
     public function __construct()
