@@ -3,9 +3,11 @@
 namespace Bruna\Classes\Entidades;
 
 use Bruna\Classes\Traits\EntidadeTrait;
+use JsonSerializable;
 use LengthException;
+use Stringable;
 
-class Usuario
+class Usuario implements Stringable, JsonSerializable
 {
     use EntidadeTrait;
 /*
@@ -87,5 +89,10 @@ class Usuario
     public function __toString()
     {
         return "ID: {$this->id}, Nome: {$this->nome}, CPF: {$this->cpf}";
+    }
+
+    public function jsonSerialize()
+    {
+        return ['id' => $this->getId(), 'nome' => $this->nome, 'cpf' => $this->getCpf()];
     }
 }

@@ -20,16 +20,20 @@ class RepositorioDoUsuarioCsv implements IRepositorioDoUsuario
  */
     private function initializeFile(): void
     {
-        if(!file_exists('listaUsuarios.csv')) {
-            $arquivoUsuarios = fopen('listaUsuarios.csv', 'w');
+        $nomeDoArquivoUsuarios = 'listaUsuarios.csv';
+
+        if(!file_exists($nomeDoArquivoUsuarios)) {
+            $arquivoUsuarios = fopen($nomeDoArquivoUsuarios, 'w');
             $cabecalho = ['ID', 'NOME', 'CPF'];
 
             fputcsv($arquivoUsuarios, $cabecalho);
             fclose($arquivoUsuarios);
         }
 
-        if(!file_exists('ultimoId.txt')) {
-            $arquivoUltimoId = fopen('ultimoId.txt', 'w');
+        $nomeDoArquivoId = 'ultimoId.txt';
+        
+        if(!file_exists($nomeDoArquivoId)) {
+            $arquivoUltimoId = fopen($nomeDoArquivoId, 'w');
             
             fwrite($arquivoUltimoId, 0);
             fclose($arquivoUltimoId);
