@@ -1,3 +1,4 @@
 *.csv
 ultimoId.txt
 listaUsuarios.json
+/vendor/

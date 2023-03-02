@@ -1,12 +1,12 @@
 <?php
 
-use Bruna\Classes\Entidades\Cpf;
-use Bruna\Classes\Entidades\Usuario;
-use Bruna\Classes\Excecoes\ErroAoEncontrarIdException;
-use Bruna\Classes\Excecoes\ErroAoInserirUsuarioException;
-use Bruna\Classes\Repositorios\RepositorioDoUsuarioJson;
+require 'vendor/autoload.php';
 
-require_once 'autoload.php';
+use Bruna\CrudPhp\Entidades\Cpf;
+use Bruna\CrudPhp\Entidades\Usuario;
+use Bruna\CrudPhp\Excecoes\ErroAoEncontrarIdException;
+use Bruna\CrudPhp\Excecoes\ErroAoInserirUsuarioException;
+use Bruna\CrudPhp\Repositorios\RepositorioDoUsuarioJson;
 
 
 function main(): void {

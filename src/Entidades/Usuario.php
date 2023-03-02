@@ -1,8 +1,8 @@
 <?php
 
-namespace Bruna\Classes\Entidades;
+namespace Bruna\CrudPhp\Entidades;
 
-use Bruna\Classes\Traits\EntidadeTrait;
+use Bruna\CrudPhp\Traits\EntidadeTrait;
 use JsonSerializable;
 use LengthException;
 use Stringable;

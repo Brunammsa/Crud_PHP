@@ -1,11 +1,11 @@
 <?php
 
-namespace Bruna\Classes\Repositorios;
+namespace Bruna\CrudPhp\Repositorios;
 
-use Bruna\Classes\Entidades\Id;
-use Bruna\Classes\Entidades\Usuario;
-use Bruna\Classes\Excecoes\ErroAoEncontrarIdException;
-use Bruna\Classes\Interfaces\IRepositorioDoUsuario;
+use Bruna\CrudPhp\Entidades\Id;
+use Bruna\CrudPhp\Entidades\Usuario;
+use Bruna\CrudPhp\Excecoes\ErroAoEncontrarIdException;
+use Bruna\CrudPhp\Interfaces\IRepositorioDoUsuario;
 
 class RepositorioDoUsuarioCsv implements IRepositorioDoUsuario
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Bruna\Classes\Interfaces;
+namespace Bruna\CrudPhp\Interfaces;
 
-use Bruna\Classes\Entidades\Usuario;
+use Bruna\CrudPhp\Entidades\Usuario;
 
 interface IRepositorioDoUsuario{
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Bruna\Classes\Entidades;
+namespace Bruna\CrudPhp\Entidades;
 
 class Id
 {    
