@@ -42,10 +42,8 @@ class RepositorioDoUsuarioJson implements IRepositorioDoUsuario
         $nomeArquivoUsuarios = 'listaUsuarios.json';
         $conteudoDoArquivo = file_get_contents($nomeArquivoUsuarios);
         $listaDeUsuarios = json_decode($conteudoDoArquivo, true);
-        
-        $id = new Id();
 
-        $usuario = ['id' => $id->numeroId, 'nome' => $nome, 'cpf' => $cpf];
+        $usuario = new Usuario($nome, $cpf);
         $listaDeUsuarios[] = $usuario;
 
         $arquivo = fopen($nomeArquivoUsuarios, 'w');
@@ -53,7 +51,7 @@ class RepositorioDoUsuarioJson implements IRepositorioDoUsuario
         fclose($arquivo);
 
         $arquivoUltimoId = fopen('ultimoId.txt', 'w');
-        fwrite($arquivoUltimoId, $id->numeroId);
+        fwrite($arquivoUltimoId, $usuario->getId());
 
         fclose($arquivoUltimoId);   
     }
@@ -80,13 +78,15 @@ class RepositorioDoUsuarioJson implements IRepositorioDoUsuario
     {
         $nomeArquivoUsuarios = 'listaUsuarios.json';
         $conteudoDoArquivo = file_get_contents($nomeArquivoUsuarios);
-        $listaDeUsuariosJson = json_decode($conteudoDoArquivo, true);
+        $listaDeUsuariosJson = json_decode($conteudoDoArquivo);
 
         $listaDeUsuariosString = [];
 
         foreach ($listaDeUsuariosJson as $linha) {
-            $linhaFormatada = "ID: {$linha['id']}, Nome: {$linha['nome']}, CPF: {$linha['cpf']}";
-            $listaDeUsuariosString[] = $linhaFormatada;
+            $usuario = new Usuario($linha->nome, $linha->cpf);
+            $id = new Id($linha->id);
+            $usuario->setId($id);
+            $listaDeUsuariosString[] = $usuario;
         }
 
         return $listaDeUsuariosString;

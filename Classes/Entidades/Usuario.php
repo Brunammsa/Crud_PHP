@@ -91,7 +91,7 @@ class Usuario implements Stringable, JsonSerializable
         return "ID: {$this->id}, Nome: {$this->nome}, CPF: {$this->cpf}";
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'id' => $this->getId(),
