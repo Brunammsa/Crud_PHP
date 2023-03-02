@@ -16,5 +16,7 @@
             "email": "brunamelo.sa@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "league/climate": "^3.8"
+    }
 }
