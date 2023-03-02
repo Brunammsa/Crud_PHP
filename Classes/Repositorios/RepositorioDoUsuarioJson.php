@@ -94,11 +94,44 @@ class RepositorioDoUsuarioJson implements IRepositorioDoUsuario
 
     public function atualizar(Usuario $usuario): bool
     {
-        return false;
+        $nomeArquivoUsuarios = 'listaUsuarios.json';
+        $conteudoDoArquivo = file_get_contents($nomeArquivoUsuarios);
+        $listaDeUsuariosJson = json_decode($conteudoDoArquivo, true);
+
+        $listaDeUsuariosAtualizada = [];
+        
+        foreach ($listaDeUsuariosJson as $linha) {
+
+            if ($linha['id'] == $usuario->getId()) {
+                $linha = $usuario;
+            }
+            $listaDeUsuariosAtualizada[] = $linha;
+        }
+
+        $arquivo = fopen($nomeArquivoUsuarios, 'w');
+        fwrite($arquivo, json_encode($listaDeUsuariosAtualizada));
+        fclose($arquivo);
+        return true;
     }
 
     public function remove(int $id): bool
     {
-        return false;
+        $nomeArquivoUsuarios = 'listaUsuarios.json';
+        $conteudoDoArquivo = file_get_contents($nomeArquivoUsuarios);
+        $listaDeUsuariosJson = json_decode($conteudoDoArquivo, true);
+
+        $listaDeUsuariosAtualizada = [];
+        
+        foreach ($listaDeUsuariosJson as $linha) {
+
+            if ($linha['id'] !== $id) {
+                $listaDeUsuariosAtualizada[] = $linha;
+            }
+        }
+
+        $arquivo = fopen($nomeArquivoUsuarios, 'w');
+        fwrite($arquivo, json_encode($listaDeUsuariosAtualizada));
+        fclose($arquivo);
+        return true;
     }
 }
