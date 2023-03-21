@@ -7,6 +7,8 @@ use Bruna\CrudPhp\Entidades\Usuario;
 use Bruna\CrudPhp\Excecoes\ErroAoEncontrarIdException;
 use Bruna\CrudPhp\Excecoes\ErroAoInserirUsuarioException;
 use Bruna\CrudPhp\Repositorios\RepositorioDoUsuarioJson;
+use Bruna\CrudPhp\Repositorios\RepositorioDoUsuarioSql;
+use Bruna\CrudPhp\Persistencia\ConnectionCreator;
 use League\CLImate\CLImate;
 
 
@@ -54,7 +56,8 @@ function adicionaUsuario(): void
     echo 'Adicionando usuario a listar' . PHP_EOL;
     echo "~~~~~~~~~~~~~~~~~~~~~~\n" . PHP_EOL;
     
-    $repositorioUsuario = new RepositorioDoUsuarioJson();
+    $pdo = ConnectionCreator::createConnection();
+    $repositorioUsuario = new RepositorioDoUsuarioSql($pdo);
     $isValidCpf = false;
 
     while($isValidCpf == false) {
