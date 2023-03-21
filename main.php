@@ -1,15 +1,19 @@
 <?php
 
-use Bruna\Classes\Entidades\Cpf;
-use Bruna\Classes\Entidades\Usuario;
-use Bruna\Classes\Excecoes\ErroAoEncontrarIdException;
-use Bruna\Classes\Excecoes\ErroAoInserirUsuarioException;
-use Bruna\Classes\Repositorios\RepositorioDoUsuario;
+require 'vendor/autoload.php';
 
-require_once 'autoload.php';
+use Bruna\CrudPhp\Entidades\Cpf;
+use Bruna\CrudPhp\Entidades\Usuario;
+use Bruna\CrudPhp\Excecoes\ErroAoEncontrarIdException;
+use Bruna\CrudPhp\Excecoes\ErroAoInserirUsuarioException;
+use Bruna\CrudPhp\Repositorios\RepositorioDoUsuarioJson;
+use Bruna\CrudPhp\Repositorios\RepositorioDoUsuarioSql;
+use Bruna\CrudPhp\Persistencia\ConnectionCreator;
+use League\CLImate\CLImate;
 
 
 function main(): void {
+    
     echo '~~~~~~~~~~~~~~ Bem vindo(a) a NOX ~~~~~~~~~~~~~' . PHP_EOL;
     echo '~~~~~~~~~~~~~~~~~~ LISTA VIP ~~~~~~~~~~~~~~~~~~' . PHP_EOL;
     menu();
@@ -40,7 +44,8 @@ function menu(): void
         } elseif ($opcao == '6') {
             exit();
         } else {
-            echo 'opção inválida' . PHP_EOL;
+            $climate = new CLImate;
+            $climate->red('opção inválida' . PHP_EOL); 
         }
     }
 }
@@ -51,7 +56,8 @@ function adicionaUsuario(): void
     echo 'Adicionando usuario a listar' . PHP_EOL;
     echo "~~~~~~~~~~~~~~~~~~~~~~\n" . PHP_EOL;
     
-    $repositorioUsuario = new RepositorioDoUsuario();
+    $pdo = ConnectionCreator::createConnection();
+    $repositorioUsuario = new RepositorioDoUsuarioSql($pdo);
     $isValidCpf = false;
 
     while($isValidCpf == false) {
@@ -60,7 +66,8 @@ function adicionaUsuario(): void
         try{
             $cpf = new Cpf($cpfUsuario);
         } catch (InvalidArgumentException $exception){
-            echo $exception->getMessage();
+            $climate = new CLImate;
+            $climate->red($exception->getMessage());
             $isValidCpf = false;
         }
     }
@@ -73,16 +80,20 @@ function adicionaUsuario(): void
         try{
             Usuario::validaNome($nomeUsuario);
         } catch (LengthException $exception) {
-            echo $exception->getMessage();
+            $climate = new CLImate;
+            $climate->red($exception->getMessage());
             $nomeValido = false;
         }
     }
 
     try {
-        $repositorioUsuario->armazena($nomeUsuario, (string) $cpf);
-        echo "usuário $nomeUsuario inserido(a) com sucesso!\n" . PHP_EOL;
+        $usuario = new Usuario(cpf: $cpfUsuario, nome: $nomeUsuario);
+        $repositorioUsuario->armazena($usuario);
+        $climate = new CLImate;
+        $climate->green("usuário $nomeUsuario inserido(a) com sucesso!\n" . PHP_EOL);
     } catch (ErroAoInserirUsuarioException $exception) {
-        echo $exception->getMessage();
+        $climate = new CLImate;
+        $climate->red($exception->getMessage());
     }
 
 }
@@ -92,8 +103,8 @@ function buscaUsuario(): void
     echo 'Encontrando usuario na listar' . PHP_EOL;
     echo "~~~~~~~~~~~~~~~~~~~~~~\n" . PHP_EOL;
 
-    $repositorioUsuario = new RepositorioDoUsuario();
-
+    $pdo = ConnectionCreator::createConnection();
+    $repositorioUsuario = new RepositorioDoUsuarioSql($pdo);
     $isValidId = false;
 
     while($isValidId == false) {
@@ -101,14 +112,22 @@ function buscaUsuario(): void
         if (is_numeric($idUsuario)) {
             try {
                 $usuarioEncontrado = $repositorioUsuario->buscaPorId($idUsuario);
-                echo $usuarioEncontrado . PHP_EOL;
+
+                if (!$usuarioEncontrado) {
+                    throw new ErroAoEncontrarIdException();
+                }
+                
+                $climate = new CLImate;
+                $climate->green($usuarioEncontrado . PHP_EOL);
                 $isValidId = true;
             } catch (ErroAoEncontrarIdException $exception) {
-                echo $exception->getMessage();
+                $climate = new CLImate;
+                $climate->red($exception->getMessage());                
                 $isValidId = false;
             }
         } else {
-            echo 'ID inválido, tente novamente' . PHP_EOL;
+            $climate = new CLImate;
+            $climate->yellow('ID inválido, tente novamente' . PHP_EOL);
             $isValidId = false;
         }
     } 
@@ -116,19 +135,19 @@ function buscaUsuario(): void
 
 function listarUsuarios(): void
 {
-    $repositorioUsuario = new RepositorioDoUsuario();
-    $listaUsuarios = $repositorioUsuario->listar();
+    $pdo = ConnectionCreator::createConnection();
+    $repositorioUsuario = new RepositorioDoUsuarioSql($pdo);    $listaUsuarios = $repositorioUsuario->listar();
 
     foreach ($listaUsuarios as $linha) {
-        $ultimaLinha = $linha;
-        echo "$ultimaLinha" . PHP_EOL;
+        $climate = new CLImate;
+        $climate->green($linha . PHP_EOL);
     } 
 }
 
 function atualizaUsuario(): void
 {
-    $repositorioUsuario = new RepositorioDoUsuario();
-
+    $pdo = ConnectionCreator::createConnection();
+    $repositorioUsuario = new RepositorioDoUsuarioSql($pdo);
     $idValid = false;
     $usuario = null;
 
@@ -139,11 +158,13 @@ function atualizaUsuario(): void
                 $usuario = $repositorioUsuario->buscaPorId($id);
                 $idValid = true;
             } catch (ErroAoEncontrarIdException $exception) {
-                echo $exception->getMessage();
+                $climate = new CLImate;
+                $climate->red($exception->getMessage());  
                 $idValid = false;
             }
         } else {
-            echo 'ID inválido, tente novamente' . PHP_EOL;
+            $climate = new CLImate;
+            $climate->yellow('ID inválido, tente novamente' . PHP_EOL);
             $idValid = false;
         }
     } 
@@ -157,7 +178,8 @@ function atualizaUsuario(): void
             new Cpf($cpfAtualizado);
             $usuario->setCpf($cpfAtualizado);
         } catch (InvalidArgumentException $exception){
-            echo $exception->getMessage();
+            $climate = new CLImate;
+            $climate->red($exception->getMessage());  
             $isValidCpf = false;
         }
     }
@@ -171,7 +193,8 @@ function atualizaUsuario(): void
             Usuario::validaNome($nomeAtualizado);
             $usuario->setNome($nomeAtualizado);
         } catch (LengthException $exception) {
-            echo $exception->getMessage();
+            $climate = new CLImate;
+            $climate->red($exception->getMessage());  
             $nomeValido = false;
         }
     }
@@ -179,15 +202,16 @@ function atualizaUsuario(): void
     $usuarioAtualizado = $repositorioUsuario->atualizar($usuario);
 
     if ($usuarioAtualizado) {
-        echo 'Usuário atualizado!' . PHP_EOL;
+        $climate = new CLImate;
+        $climate->green('Usuário atualizado!' . PHP_EOL);  
     }
 }
 
 
 function removeUsuario(): void
 {
-    $repositorioUsuario = new RepositorioDoUsuario();
-
+    $pdo = ConnectionCreator::createConnection();
+    $repositorioUsuario = new RepositorioDoUsuarioSql($pdo);
     $idValid = false;
 
     while($idValid == false) {
@@ -197,11 +221,13 @@ function removeUsuario(): void
                 $repositorioUsuario->buscaPorId($id);
                 $idValid = true;
             } catch (ErroAoEncontrarIdException $exception) {
-                echo $exception->getMessage();
+                $climate = new CLImate;
+                $climate->red($exception->getMessage()); 
                 $idValid = false;
             }
         } else {
-            echo 'ID inválido, tente novamente' . PHP_EOL;
+            $climate = new CLImate;
+            $climate->yellow('ID inválido, tente novamente' . PHP_EOL);
             $idValid = false;
         }
     }
@@ -209,7 +235,8 @@ function removeUsuario(): void
     $usuarioRemovido = $repositorioUsuario->remove($id);
 
     if ($usuarioRemovido) {
-        echo 'Usuário removido!' . PHP_EOL;
+        $climate = new CLImate;
+        $climate->green('Usuário removido!' . PHP_EOL);
     }
 }
 

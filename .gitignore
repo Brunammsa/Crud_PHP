@@ -1,3 +1,6 @@
 *.csv
 ultimoId.txt
 listaUsuarios.json
+/vendor/
+conexao.php
+src/Persistencia/ConnectionCreator.php

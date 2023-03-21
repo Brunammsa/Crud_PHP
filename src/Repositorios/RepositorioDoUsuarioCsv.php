@@ -1,13 +1,13 @@
 <?php
 
-namespace Bruna\Classes\Repositorios;
+namespace Bruna\CrudPhp\Repositorios;
 
-use Bruna\Classes\Entidades\Id;
-use Bruna\Classes\Entidades\Usuario;
-use Bruna\Classes\Excecoes\ErroAoEncontrarIdException;
-use Bruna\Classes\Interfaces\IRepositorioDoUsuario;
+use Bruna\CrudPhp\Entidades\Id;
+use Bruna\CrudPhp\Entidades\Usuario;
+use Bruna\CrudPhp\Excecoes\ErroAoEncontrarIdException;
+use Bruna\CrudPhp\Interfaces\IRepositorioDoUsuario;
 
-class RepositorioDoUsuario implements IRepositorioDoUsuario
+class RepositorioDoUsuarioCsv implements IRepositorioDoUsuario
 {
     
     public function __construct()
@@ -20,16 +20,20 @@ class RepositorioDoUsuario implements IRepositorioDoUsuario
  */
     private function initializeFile(): void
     {
-        if(!file_exists('listaUsuarios.csv')) {
-            $arquivoUsuarios = fopen('listaUsuarios.csv', 'w');
+        $nomeDoArquivoUsuarios = 'listaUsuarios.csv';
+
+        if(!file_exists($nomeDoArquivoUsuarios)) {
+            $arquivoUsuarios = fopen($nomeDoArquivoUsuarios, 'w');
             $cabecalho = ['ID', 'NOME', 'CPF'];
 
             fputcsv($arquivoUsuarios, $cabecalho);
             fclose($arquivoUsuarios);
         }
 
-        if(!file_exists('ultimoId.txt')) {
-            $arquivoUltimoId = fopen('ultimoId.txt', 'w');
+        $nomeDoArquivoId = 'ultimoId.txt';
+        
+        if(!file_exists($nomeDoArquivoId)) {
+            $arquivoUltimoId = fopen($nomeDoArquivoId, 'w');
             
             fwrite($arquivoUltimoId, 0);
             fclose($arquivoUltimoId);

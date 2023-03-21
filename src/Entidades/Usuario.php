@@ -1,11 +1,13 @@
 <?php
 
-namespace Bruna\Classes\Entidades;
+namespace Bruna\CrudPhp\Entidades;
 
-use Bruna\Classes\Traits\EntidadeTrait;
+use Bruna\CrudPhp\Traits\EntidadeTrait;
+use JsonSerializable;
 use LengthException;
+use Stringable;
 
-class Usuario
+class Usuario implements Stringable, JsonSerializable
 {
     use EntidadeTrait;
 /*
@@ -54,7 +56,7 @@ class Usuario
 
     static public function validaNome(string $name): void
     {
-        if(strlen($name) <= 0) {
+        if(strlen($name) == 0) {
             throw new LengthException('Nome inválido' . PHP_EOL);
         }
     }
@@ -83,9 +85,23 @@ class Usuario
     {
         return $this->id->numeroId;
     }
+
+    public function setId(int $id): void
+    {
+        $this->id = new Id($id);
+    }
  
     public function __toString()
     {
         return "ID: {$this->id}, Nome: {$this->nome}, CPF: {$this->cpf}";
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'nome' => $this->nome,
+            'cpf' => $this->getCpf()
+        ];
     }
 }

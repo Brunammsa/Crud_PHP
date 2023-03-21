@@ -1,0 +1,22 @@
+{
+    "name": "bruna/crud_php",
+    "description": "controle de usuários",
+    "type": "project",
+    "require-dev": {
+        "phpunit/phpunit": "^10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Bruna\\CrudPhp\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Bruna",
+            "email": "brunamelo.sa@gmail.com"
+        }
+    ],
+    "require": {
+        "league/climate": "^3.8"
+    }
+}
