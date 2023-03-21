@@ -17,6 +17,7 @@
         }
     ],
     "require": {
-        "league/climate": "^3.8"
+        "league/climate": "^3.8",
+        "symfony/dotenv": "^6.2"
     }
 }

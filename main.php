@@ -11,9 +11,7 @@ use Bruna\CrudPhp\Repositorios\RepositorioDoUsuarioSql;
 use Bruna\CrudPhp\Persistencia\ConnectionCreator;
 use League\CLImate\CLImate;
 
-
 function main(): void {
-    
     echo '~~~~~~~~~~~~~~ Bem vindo(a) a NOX ~~~~~~~~~~~~~' . PHP_EOL;
     echo '~~~~~~~~~~~~~~~~~~ LISTA VIP ~~~~~~~~~~~~~~~~~~' . PHP_EOL;
     menu();
