@@ -6,7 +6,7 @@ use Bruna\CrudPhp\Entidades\Usuario;
 
 interface IRepositorioDoUsuario{
 
-    public function armazena(string $nome, string $cpf): void;
+    public function armazena(Usuario $usuario): void;
     public function buscaPorId(int $id): ?Usuario;
 
     /**

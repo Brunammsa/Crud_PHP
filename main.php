@@ -87,7 +87,8 @@ function adicionaUsuario(): void
     }
 
     try {
-        $repositorioUsuario->armazena($nomeUsuario, (string) $cpf);
+        $usuario = new Usuario(cpf: $cpfUsuario, nome: $nomeUsuario);
+        $repositorioUsuario->armazena($usuario);
         $climate = new CLImate;
         $climate->green("usuário $nomeUsuario inserido(a) com sucesso!\n" . PHP_EOL);
     } catch (ErroAoInserirUsuarioException $exception) {
@@ -102,8 +103,8 @@ function buscaUsuario(): void
     echo 'Encontrando usuario na listar' . PHP_EOL;
     echo "~~~~~~~~~~~~~~~~~~~~~~\n" . PHP_EOL;
 
-    $repositorioUsuario = new RepositorioDoUsuarioJson();
-
+    $pdo = ConnectionCreator::createConnection();
+    $repositorioUsuario = new RepositorioDoUsuarioSql($pdo);
     $isValidId = false;
 
     while($isValidId == false) {
@@ -111,6 +112,11 @@ function buscaUsuario(): void
         if (is_numeric($idUsuario)) {
             try {
                 $usuarioEncontrado = $repositorioUsuario->buscaPorId($idUsuario);
+
+                if (!$usuarioEncontrado) {
+                    throw new ErroAoEncontrarIdException();
+                }
+                
                 $climate = new CLImate;
                 $climate->green($usuarioEncontrado . PHP_EOL);
                 $isValidId = true;
@@ -129,8 +135,8 @@ function buscaUsuario(): void
 
 function listarUsuarios(): void
 {
-    $repositorioUsuario = new RepositorioDoUsuarioJson();
-    $listaUsuarios = $repositorioUsuario->listar();
+    $pdo = ConnectionCreator::createConnection();
+    $repositorioUsuario = new RepositorioDoUsuarioSql($pdo);    $listaUsuarios = $repositorioUsuario->listar();
 
     foreach ($listaUsuarios as $linha) {
         $climate = new CLImate;
@@ -140,8 +146,8 @@ function listarUsuarios(): void
 
 function atualizaUsuario(): void
 {
-    $repositorioUsuario = new RepositorioDoUsuarioJson();
-
+    $pdo = ConnectionCreator::createConnection();
+    $repositorioUsuario = new RepositorioDoUsuarioSql($pdo);
     $idValid = false;
     $usuario = null;
 
@@ -204,8 +210,8 @@ function atualizaUsuario(): void
 
 function removeUsuario(): void
 {
-    $repositorioUsuario = new RepositorioDoUsuarioJson();
-
+    $pdo = ConnectionCreator::createConnection();
+    $repositorioUsuario = new RepositorioDoUsuarioSql($pdo);
     $idValid = false;
 
     while($idValid == false) {

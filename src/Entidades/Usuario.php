@@ -56,7 +56,7 @@ class Usuario implements Stringable, JsonSerializable
 
     static public function validaNome(string $name): void
     {
-        if(strlen($name) <= 0) {
+        if(strlen($name) == 0) {
             throw new LengthException('Nome inválido' . PHP_EOL);
         }
     }
@@ -84,6 +84,11 @@ class Usuario implements Stringable, JsonSerializable
     public function getId(): int
     {
         return $this->id->numeroId;
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = new Id($id);
     }
  
     public function __toString()
