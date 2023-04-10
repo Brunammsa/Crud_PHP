@@ -6,10 +6,14 @@ use Bruna\CrudPhp\Entidades\Cpf;
 use Bruna\CrudPhp\Entidades\Usuario;
 use Bruna\CrudPhp\Excecoes\ErroAoEncontrarIdException;
 use Bruna\CrudPhp\Excecoes\ErroAoInserirUsuarioException;
-use Bruna\CrudPhp\Repositorios\RepositorioDoUsuarioJson;
 use Bruna\CrudPhp\Repositorios\RepositorioDoUsuarioSql;
 use Bruna\CrudPhp\Persistencia\ConnectionCreator;
 use League\CLImate\CLImate;
+use Brunammsa\Inputzvei\InputCpf;
+use Brunammsa\Inputzvei\InputText;
+use Brunammsa\Inputzvei\InputNumber;
+
+
 
 function main(): void {
     echo '~~~~~~~~~~~~~~ Bem vindo(a) a NOX ~~~~~~~~~~~~~' . PHP_EOL;
@@ -56,39 +60,20 @@ function adicionaUsuario(): void
     
     $pdo = ConnectionCreator::createConnection();
     $repositorioUsuario = new RepositorioDoUsuarioSql($pdo);
-    $isValidCpf = false;
 
-    while($isValidCpf == false) {
-        $cpfUsuario = readline('Informe o CPF do usuário:(000.000.000-00) ');
-        $isValidCpf = true;
-        try{
-            $cpf = new Cpf($cpfUsuario);
-        } catch (InvalidArgumentException $exception){
-            $climate = new CLImate;
-            $climate->red($exception->getMessage());
-            $isValidCpf = false;
-        }
-    }
-    
-    $nomeValido = false;
+    $inputValido = false;
 
-    while ($nomeValido == false) {
-        $nomeUsuario = readline('Informe o nome do usuário: ');
-        $nomeValido = true;
-        try{
-            Usuario::validaNome($nomeUsuario);
-        } catch (LengthException $exception) {
-            $climate = new CLImate;
-            $climate->red($exception->getMessage());
-            $nomeValido = false;
-        }
-    }
+    $inputzVei = new InputCpf('Com apenas números, insira um cpf válido: ');
+    $CpfAnswer = $inputzVei->ask();
+
+    $inputzVei = new InputText('Informe o nome do usuário: ');
+    $nameAnswer =  $inputzVei->ask();
 
     try {
-        $usuario = new Usuario(cpf: $cpfUsuario, nome: $nomeUsuario);
+        $usuario = new Usuario(cpf: $CpfAnswer, nome: $nameAnswer);
         $repositorioUsuario->armazena($usuario);
         $climate = new CLImate;
-        $climate->green("usuário $nomeUsuario inserido(a) com sucesso!\n" . PHP_EOL);
+        $climate->green("usuário $nameAnswer inserido(a) com sucesso!\n" . PHP_EOL);
     } catch (ErroAoInserirUsuarioException $exception) {
         $climate = new CLImate;
         $climate->red($exception->getMessage());
@@ -103,38 +88,31 @@ function buscaUsuario(): void
 
     $pdo = ConnectionCreator::createConnection();
     $repositorioUsuario = new RepositorioDoUsuarioSql($pdo);
-    $isValidId = false;
 
-    while($isValidId == false) {
-        $idUsuario = readline('Qual o ID do usuário que deseja encontrar? ');
-        if (is_numeric($idUsuario)) {
-            try {
-                $usuarioEncontrado = $repositorioUsuario->buscaPorId($idUsuario);
+    $inputzVei = new InputNumber('Qual o ID do usuário? ');
+    $idAnswer = $inputzVei->ask();
 
-                if (!$usuarioEncontrado) {
-                    throw new ErroAoEncontrarIdException();
-                }
-                
-                $climate = new CLImate;
-                $climate->green($usuarioEncontrado . PHP_EOL);
-                $isValidId = true;
-            } catch (ErroAoEncontrarIdException $exception) {
-                $climate = new CLImate;
-                $climate->red($exception->getMessage());                
-                $isValidId = false;
-            }
-        } else {
-            $climate = new CLImate;
-            $climate->yellow('ID inválido, tente novamente' . PHP_EOL);
-            $isValidId = false;
+    try {
+        $usuarioEncontrado = $repositorioUsuario->buscaPorId($idAnswer);
+        if (!$usuarioEncontrado) {
+            throw new ErroAoEncontrarIdException();
         }
-    } 
+    
+        $climate = new CLImate;
+        $climate->green($usuarioEncontrado . PHP_EOL);
+
+    } catch (ErroAoEncontrarIdException $exception) {
+        $climate = new CLImate;
+        $climate->red($exception->getMessage());                              
+    }
+
 }
 
 function listarUsuarios(): void
 {
     $pdo = ConnectionCreator::createConnection();
-    $repositorioUsuario = new RepositorioDoUsuarioSql($pdo);    $listaUsuarios = $repositorioUsuario->listar();
+    $repositorioUsuario = new RepositorioDoUsuarioSql($pdo);
+    $listaUsuarios = $repositorioUsuario->listar();
 
     foreach ($listaUsuarios as $linha) {
         $climate = new CLImate;
@@ -146,55 +124,39 @@ function atualizaUsuario(): void
 {
     $pdo = ConnectionCreator::createConnection();
     $repositorioUsuario = new RepositorioDoUsuarioSql($pdo);
-    $idValid = false;
-    $usuario = null;
 
-    while($idValid == false) {
-        $id = readline("Digite o ID da pessoa que deseja atualizar: ");
-        if (is_numeric($id)) {
-            try {
-                $usuario = $repositorioUsuario->buscaPorId($id);
-                $idValid = true;
-            } catch (ErroAoEncontrarIdException $exception) {
-                $climate = new CLImate;
-                $climate->red($exception->getMessage());  
-                $idValid = false;
-            }
-        } else {
-            $climate = new CLImate;
-            $climate->yellow('ID inválido, tente novamente' . PHP_EOL);
-            $idValid = false;
+    $inputzVei = new inputNumber('Digite o ID da pessoa que deseja atualizar: ');
+    $idAnswer = $inputzVei->ask();
+
+    try {
+        $usuario = $repositorioUsuario->buscaPorId($idAnswer);
+        if (!$usuario) {
+            throw new ErroAoEncontrarIdException();
         }
-    } 
-
-    $isValidCpf = false;
-
-    while($isValidCpf == false) {
-        $cpfAtualizado = readline("Qual o cpf atualizado?(000.000.000-00) ");
-        $isValidCpf = true;
-        try{
-            new Cpf($cpfAtualizado);
-            $usuario->setCpf($cpfAtualizado);
-        } catch (InvalidArgumentException $exception){
-            $climate = new CLImate;
-            $climate->red($exception->getMessage());  
-            $isValidCpf = false;
-        }
+    } catch (ErroAoEncontrarIdException $exception) {
+        $climate = new CLImate;
+        $climate->red($exception->getMessage());  
+        return;
     }
-    
-    $nomeValido = false;
 
-    while ($nomeValido == false) {
-        $nomeAtualizado = readline("Qual o nome atualizado? ");
-        $nomeValido = true;
-        try{
-            Usuario::validaNome($nomeAtualizado);
-            $usuario->setNome($nomeAtualizado);
-        } catch (LengthException $exception) {
-            $climate = new CLImate;
-            $climate->red($exception->getMessage());  
-            $nomeValido = false;
-        }
+    $inputzVei = new inputCpf('Com apenas números, qual o cpf atualizado? ');
+    $cpfAnswer = $inputzVei->ask();
+
+    try{
+        $usuario->setCpf($cpfAnswer);
+    } catch (InvalidArgumentException $exception){
+        $climate = new CLImate;
+        $climate->red($exception->getMessage());  
+    }
+
+    $inputzVei = new inputText('Qual o nome atualizado? ');
+    $nameAnswer = $inputzVei->ask();
+
+    try{
+        $usuario->setNome($nameAnswer);
+    } catch (LengthException $exception) {
+        $climate = new CLImate;
+        $climate->red($exception->getMessage());  
     }
 
     $usuarioAtualizado = $repositorioUsuario->atualizar($usuario);
@@ -210,27 +172,22 @@ function removeUsuario(): void
 {
     $pdo = ConnectionCreator::createConnection();
     $repositorioUsuario = new RepositorioDoUsuarioSql($pdo);
-    $idValid = false;
 
-    while($idValid == false) {
-        $id = readline("Digite o ID da pessoa que deseja atualizar: ");
-        if (is_numeric($id)) {
-            try {
-                $repositorioUsuario->buscaPorId($id);
-                $idValid = true;
-            } catch (ErroAoEncontrarIdException $exception) {
-                $climate = new CLImate;
-                $climate->red($exception->getMessage()); 
-                $idValid = false;
-            }
-        } else {
-            $climate = new CLImate;
-            $climate->yellow('ID inválido, tente novamente' . PHP_EOL);
-            $idValid = false;
+    $inputzVei = new inputNumber("Digite o ID da pessoa que deseja remover: ");
+    $idAnswer = $inputzVei->ask();
+
+    try {
+        $usuario = $repositorioUsuario->buscaPorId($idAnswer);
+        if (!$usuario) {
+            throw new ErroAoEncontrarIdException();
         }
+    } catch (ErroAoEncontrarIdException $exception) {
+        $climate = new CLImate;
+        $climate->red($exception->getMessage());
+        return;
     }
 
-    $usuarioRemovido = $repositorioUsuario->remove($id);
+    $usuarioRemovido = $repositorioUsuario->remove($idAnswer);
 
     if ($usuarioRemovido) {
         $climate = new CLImate;
